@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Jenjang;
+
+class JenjangController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        //Filter search
+        $jenjangs = Jenjang::query()
+            ->when($request->search, function ($query, $search) {
+                $query->where('nama_jenjang', 'like', "%{$search}%")
+                      ->orWhere('kode_jenjang', 'like', "%{$search}%");
+            })
+            ->paginate(10); 
+
+        return view('jenjang.index', compact('jenjangs'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('jenjang.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+         // Validasi sekaligus simpan hasilnya ke variabel $data
+        $data = $request->validate([
+            'kode_jenjang' => 'required|string|max:100',
+            'nama_jenjang' => 'required|string|max:20',
+            'keterangan'    => 'required|string|max:100',
+            'status'      => 'required|string|max:50',
+        ]);
+
+        // Simpan data langsung (tanpa perlu definisikan satu-satu)
+        Jenjang::create($data);
+
+        return redirect()->route('jenjang.index')->with('success', 'jenjang berhasil ditambahkan.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Jenjang $jenjang)
+    {
+        return view('jenjang.show', compact('jenjang'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Jenjang $jenjang)
+    {
+        return view('jenjang.edit', compact('jenjang'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Jenjang $jenjang)
+    {
+         // Validasi data
+        $data = $request->validate([
+            'kode_jenjang' => 'required|string|max:100',
+            'nama_jenjang' => 'required|string|max:20',
+            'keterangan' => 'required|string|max:100',
+            'status' => 'required|string|max:50',
+        ]);
+
+        // Update data langsung
+        $jenjang->update($data);
+
+        return redirect()->route('jenjang.index')->with('success', 'Data jenjang berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Jenjang $jenjang)
+    {
+         $jenjang->delete();
+
+        return redirect()->route('jenjang.index')->with('success', 'jenjang berhasil dihapus.');
+    }
+}
