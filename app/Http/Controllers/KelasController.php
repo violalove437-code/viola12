@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guru;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 
@@ -11,9 +10,8 @@ class KelasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-         $kelas = Kelas::with('guru')->get();
 
         return view('kelas.index', compact('kelas'));
     }
@@ -23,9 +21,9 @@ class KelasController extends Controller
      */
     public function create()
     {
-        $guru = Guru::all();
+        $kelas = Kelas::all();
 
-        return view('kelas.create', compact('guru'));
+        return view('kelas.create', compact('kelas'));
     }
 
     /**
@@ -34,8 +32,12 @@ class KelasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'guru_id' => 'required|exists:gurus,id', // Pastikan guru yang dipilih ada di database
+            'kelas' => 'required|string|max:255',
+            'jurusan_id'=> 'required|exists:jurusans,id', // Pastikan siswa yang dipilih ada di database
+            'jenjang_id' => 'required|exists:jenjangs,id',
+            'siswa_id' => 'required|exists:siswas,id',
+            'keterangan'=> 'required|string|max:255',
+            'status' => 'required|in:aktif,tidak-aktif' // Pastikan siswa yang dipilih ada di database
         ]);
 
         Kelas::create($request->all());
@@ -46,51 +48,53 @@ class KelasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Kelas $kelas)
     {
-        //
+
+        return view('kelas.show', compact('kelas'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $kelas = Kelas::findOrFail($id);
+    public function edit(Kelas $kelas)
+    {   
+        $kelas = Kelas::all();
 
-        $guru = Guru::all();
-
-        return view('kelas.edit', compact('kelas', 'guru'));
+        return view('kelas.edit', compact('kelas', 'siswa'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Kelas $kelas)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'guru_id' => 'required|exists:gurus,id',
+            'kelas' => 'required|string|max:255',
+            'jurusan_id' => 'required|exists:jurusans,id',
+            'jenjang_id' => 'required|exists:jenjangs,id',
+            'siswa_id' => 'required|exists:siswas,id',
+            'keterangan' => 'required|string|max:255',
+            'status' => 'required|in:aktif,tidak-aktif'
         ]);
 
-        $kelas = Kelas::findOrFail($id);
+        $kelas->update($request->all());
 
-        $kelas->update([
-            'name' => $request->name,
-            'guru_id' => $request->guru_id,
-        ]);
         return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Kelas $kelas)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas->delete();
+
+        return redirect()->route('kelas.index')->with('success', 'Data Kelas berhasil dihapus!');
 
         $kelas->delete();
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus!');
     }
 }
+

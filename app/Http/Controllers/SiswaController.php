@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Models\Kelas;
 
 class SiswaController extends Controller
 {
@@ -14,8 +15,8 @@ class SiswaController extends Controller
     {
         $siswas = Siswa::query()
             ->when($request->search, function ($query, $search) {
-                $query->where('nama_siswa', 'like', "%{$search}%")
-                      ->orWhere('nis', 'like', "%{$search}%");
+                $query->where('nis', 'like', "%{$search}%")
+                      ->orWhere('nama_siswa', 'like', "%{$search}%");
             })
             ->paginate(10); 
 
