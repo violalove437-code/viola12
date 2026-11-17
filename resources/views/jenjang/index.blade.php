@@ -47,8 +47,8 @@
                 <thead>
                     <tr>
                         <th style="width: 10px">No</th>
-                        <th>Nama Jenjang</th>
                         <th>Kode Jenjang</th>
+                         <th>Nama Jenjang</th>
                         <th>Keterangan</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -58,8 +58,8 @@
                     @forelse ($jenjangs as $key => $jenjang)
                     <tr>
                         <td>{{ $jenjangs->firstItem() + $key }}</td>
-                        <td>{{ $jenjang->nama_jenjang }}</td>
                         <td>{{ $jenjang->kode_jenjang }}</td>
+                        <td>{{ $jenjang->nama_jenjang }}</td>
                         <td>{{ $jenjang->keterangan }}</td>
                         <td>{{ $jenjang->status }}</td>
                         <td>

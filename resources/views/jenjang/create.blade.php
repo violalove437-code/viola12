@@ -13,19 +13,20 @@
                 @csrf 
 
                 <div class="form-group">
-                    <label for="nama_jenjang">Nama Jenjang</label>
-                    <input type="text" name="nama_jenjang" class="form-control @error('nama_jenjang') is-invalid @enderror" id="nama_jenjang" required value="{{ old('nama_jenjang') }}">
-                    @error('nama_jenjang')
+                    <label for="kode_jenjang">Kode Jenjang</label>
+                    <input type="text" name="kode_jenjang" class="form-control @error('kode_jenjang') is-invalid @enderror" id="kode_jenjang" required value="{{ old('kode_jenjang') }}">
+                    @error('kode_jenjang')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
 
+                
                 <div class="form-group">
-                    <label for="kode_jenjang">Kode Jenjang</label>
-                    <input type="text" name="kode_jenjang" class="form-control @error('kode_jenjang') is-invalid @enderror" id="kode_jenjang" required value="{{ old('kode_jenjang') }}">
-                    @error('kode_jenjang')
+                    <label for="nama_jenjang">Nama Jenjang</label>
+                    <input type="text" name="nama_jenjang" class="form-control @error('nama_jenjang') is-invalid @enderror" id="nama_jenjang" required value="{{ old('nama_jenjang') }}">
+                    @error('nama_jenjang')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
